@@ -1,0 +1,9 @@
+df = df.drop_duplicates()
+df["price"] = df["price"].fillna(
+    df.groupby("product")["price"].transform("median")
+)
+df["revenue"] = df["qty"] * df["price"]
+result = (df.groupby("region", as_index=False)["revenue"].sum()
+            .sort_values("revenue", ascending=False)
+            .reset_index(drop=True))
+print(result)
